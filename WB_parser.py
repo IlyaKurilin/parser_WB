@@ -28,9 +28,14 @@ class WB:
         html = bs(self.link, "html.parser")
         search = html.findAll('a', class_="product-card__link")
         prices = html.findAll('ins', class_="price__lower-price")
-        self.data = {"Ссылка": [link.get('href') for link in search],
-                     "Название": [name.get('aria-label') for name in search],
-                     "Цена": [price.text.strip(' ') for price in prices]}
+        rating = html.findAll('span', class_="address-rate-mini address-rate-mini--sm")
+        marks = html.findAll('span', class_="product-card__count")
+        time.sleep(6)
+        self.data = {"Ссылка на товар": [link.get('href') for link in search],
+                     "Наименование товара": [name.get('aria-label') for name in search],
+                     "Цена товара": [price.text.strip(' ') for price in prices],
+                     "Рейтинг товара": [float(rang.text) for rang in rating],
+                     "Количество оценок у товара": [mark.text for mark in marks]}
 
     def generate_xlsx(self):
         """Генерим таблицу в xlsx"""
